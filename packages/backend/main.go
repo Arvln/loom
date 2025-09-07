@@ -1,26 +1,33 @@
 package main
 
 import (
+	"log"
+
+	"app/db"
+	"app/routes"
+
+	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
-
-	// 建立 /api 路由群組
-	api := r.Group("/api")
-	{
-		api.GET("/hello", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "Hello World from Gin!",
-			})
-		})
-
-		api.GET("/healthz", func(c *gin.Context) {
-			c.Status(200)
-		})
+	if err := db.Connect(); err != nil {
+		log.Fatalf("Failed to connect DB: %v", err)
 	}
 
-	// 對外 port 80
-	r.Run(":80")
+	if err := db.RunMigration(); err != nil {
+		log.Fatalf("Failed to connect DB: %v", err)
+	}
+
+	if err := db.RunSeeder(); err != nil {
+		log.Fatalf("Failed to connect DB: %v", err)
+	}
+
+	r := gin.Default()
+
+	apiGroup := r.Group("/api")
+
+	routes.RegisterAPIRoutes(apiGroup)
+
+	endless.ListenAndServe(":80", r)
 }

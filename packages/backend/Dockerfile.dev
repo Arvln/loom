@@ -2,8 +2,6 @@ FROM golang:1.25.1-alpine3.22
 
 WORKDIR /app
 
-# RUN go install github.com/gin-gonic/gin@latest
-
 RUN go install github.com/air-verse/air@latest
 
 COPY go.mod go.sum ./
@@ -11,7 +9,4 @@ RUN go mod download
 
 COPY . .
 
-ENV PATH=$PATH:/go/bin
-
 CMD ["air", "-c", ".air.toml"]
-
