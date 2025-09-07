@@ -1,0 +1,17 @@
+{
+  "name": "frontend dev container",
+  "dockerComposeFile": "${localWorkspaceFolder}/../../docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/usr/src",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.node-debug2",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "overrideCommand": false,
+  "postCreateCommand": "corepack enable && pnpm install"
+}
