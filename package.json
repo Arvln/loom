@@ -2,19 +2,31 @@
   "name": "@loom/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
   "private": true,
-  "dependencies": {},
+  "scripts": {
+    "prepare": "husky",
+    "prettier-fix": "prettier --write ."
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@nx/js": "21.4.1",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
     "nx": "21.4.1",
     "prettier": "^2.6.2",
+    "tailwindcss": "^4.1.13",
     "tslib": "^2.3.0",
-    "typescript": "~5.8.2",
-    "tailwindcss": "^4.1.13"
+    "typescript": "~5.8.2"
   },
   "workspaces": [
     "packages/*"
