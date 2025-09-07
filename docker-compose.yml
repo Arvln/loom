@@ -10,23 +10,19 @@ services:
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/frontend/node_modules
       - /usr/src/packages/frontend/.next
-    depends_on:
-      - server
     restart: always
     networks:
       - web-network
   admin-web:
     build:
       context: .
-      dockerfile: ./apps/admin-frontend/Dockerfile.dev
+      dockerfile: ./packages/admin-frontend/Dockerfile.dev
     container_name: admin-web
     volumes:
       - ./packages/admin-frontend:/usr/src/packages/admin-frontend:cached
       - ./packages/ui:/usr/src/packages/ui
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/admin-frontend/node_modules
-    depends_on:
-      - server
     restart: always
     networks:
       - web-network
@@ -42,6 +38,7 @@ services:
       - ./nginx/logs:/var/log/nginx
     depends_on:
       - web
+      - admin-web
     restart: always
     networks:
       - web-network
