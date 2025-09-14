@@ -11,7 +11,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, '../..'),
       '@admin-frontend': path.resolve(__dirname, '.'),
-      '@ui': path.resolve(__dirname, '../ui'),
+      '@workspace/ui': path.resolve(__dirname, '../ui/src'),
     },
   },
   build: {

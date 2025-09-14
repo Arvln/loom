@@ -8,6 +8,8 @@ COPY ./ ./
 
 ENV CI=true
 
+WORKDIR /usr/src/packages/ui
+
 RUN npm install -g pm2 pnpm && pnpm i --frozen-lockfile
 
 WORKDIR /usr/src/packages/frontend

@@ -28,7 +28,8 @@
     "tslib": "^2.3.0",
     "typescript": "~5.8.2"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
 }
