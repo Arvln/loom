@@ -10,6 +10,7 @@ services:
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/frontend/node_modules
       - /usr/src/packages/frontend/.next
+      - /usr/src/packages/ui/node_modules
     restart: always
     networks:
       - web-network
@@ -23,6 +24,7 @@ services:
       - ./packages/ui:/usr/src/packages/ui
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/admin-frontend/node_modules
+      - /usr/src/packages/ui/node_modules
     restart: always
     networks:
       - web-network
@@ -54,7 +56,7 @@ services:
       POSTGRES_PASSWORD: Passw0rd
       POSTGRES_DB: loom
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
