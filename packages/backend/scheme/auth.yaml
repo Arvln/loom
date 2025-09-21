@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: Auth API
+  version: 1.0.0
+
+paths:
+  /api/register:
+    post:
+      summary: User Registration
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - name
+              properties:
+                username:
+                  type: string
+                  example: johndoe
+                password:
+                  type: string
+                  format: password
+                  example: secret123
+                name:
+                  type: string
+                  example: John Doe
+                # turnstile_token:
+                #   type: string
+                #   description: Turnstile verification token
+      responses:
+        "200":
+          description: Register success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: register success
+        "400":
+          description: Validation error or duplicate username
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: username already exists
+
+  /api/login:
+    post:
+      summary: User Login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: johndoe
+                password:
+                  type: string
+                  format: password
+                  example: secret123
+      responses:
+        "200":
+          description: Login success
+          headers:
+            Set-Cookie:
+              description: Session cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: login success
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid credentials
+
+  /api/logout:
+    get:
+      summary: User Logout
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: Logout success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: logout success
+
+  /api/profile:
+    get:
+      summary: Get User Profile
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: johndoe
+                  name:
+                    type: string
+                    example: John Doe
+                  # avatar:
+                  #   type: string
+                  #   example: https://example.com/avatar.png
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not found

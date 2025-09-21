@@ -4,24 +4,22 @@ import (
 	"app/internal/models"
 	"fmt"
 	"log"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 // RunSeeder 插入假資料
 func RunSeeder() error {
 	// 建立預設密碼
-	password, _ := bcrypt.GenerateFromPassword([]byte("loom123"), bcrypt.DefaultCost)
+	password := "loom123"
 
 	users := []models.User{
-		{Username: "arvin", Password: string(password), Name: "Arvin"},
-		{Username: "mmarshall", Password: string(password), Name: "Marshall"},
-		{Username: "ryan", Password: string(password), Name: "Ryan"},
-		{Username: "alice", Password: string(password), Name: "Alice"},
-		{Username: "bob", Password: string(password), Name: "Bob"},
-		{Username: "charlie", Password: string(password), Name: "Charlie"},
-		{Username: "david", Password: string(password), Name: "David"},
-		{Username: "eve", Password: string(password), Name: "Eve"},
+		// {Username: "arvin", Password: password, Name: "Arvin"},
+		// {Username: "marshall", Password: password, Name: "Marshall"},
+		// {Username: "ryan", Password: password, Name: "Ryan"},
+		{Username: "alice", Password: password, Name: "Alice"},
+		{Username: "bob", Password: password, Name: "Bob"},
+		{Username: "charlie", Password: password, Name: "Charlie"},
+		{Username: "david", Password: password, Name: "David"},
+		{Username: "eve", Password: password, Name: "Eve"},
 	}
 
 	// 建立使用者

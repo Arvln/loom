@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -19,6 +20,12 @@ type User struct {
 
 // BeforeCreate - hash password before saving
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	// bcrypt
-	return nil // 這裡我們等 seeder 時處理 hash
+	if u.Password != "" {
+		hashed, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
+		u.Password = string(hashed)
+	}
+	return nil
 }
