@@ -15,7 +15,18 @@
       "prettier --write"
     ]
   },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "lucide-react": "^0.475.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "zod": "^3.25.76"
+  },
   "devDependencies": {
+    "@types/node": "^20.19.9",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "@nx/js": "21.4.1",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
@@ -26,6 +37,6 @@
     "prettier": "^2.6.2",
     "tailwindcss": "^4.1.13",
     "tslib": "^2.3.0",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.3"
   }
 }
