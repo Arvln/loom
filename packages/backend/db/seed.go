@@ -2,8 +2,12 @@ package db
 
 import (
 	"app/internal/models"
+	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
+
+	"gorm.io/datatypes"
 )
 
 // RunSeeder 插入假資料
@@ -37,15 +41,26 @@ func RunSeeder() error {
 	}
 
 	// 建立 tags（避免重複）
-	tags := []string{"Go", "Gin"}
-	var tagModels []models.Tag
+	tagNames := []string{
+		"Go",
+		"Gin",
+		"GORM",
+		"API",
+		"Backend",
+		"Frontend",
+		"Database",
+		"JSON",
+		"Markdown",
+		"Testing",
+	}
+	var tags []models.Tag
 
-	for _, name := range tags {
+	for _, name := range tagNames {
 		var tag models.Tag
 		if err := DB.Where("name = ?", name).FirstOrCreate(&tag, models.Tag{Name: name}).Error; err != nil {
 			return fmt.Errorf("failed to seed tag %s: %v", name, err)
 		}
-		tagModels = append(tagModels, tag)
+		tags = append(tags, tag)
 	}
 
 	// 建立文章，使用 Alice 作為作者
@@ -54,19 +69,38 @@ func RunSeeder() error {
 		return fmt.Errorf("author alice not found: %v", err)
 	}
 
-	article := models.Article{
-		Title:    "第一篇文章",
-		Content:  "# Hello World\n這是一篇 **Markdown** 測試文章。",
-		AuthorID: alice.Id,
-		Tags:     tagModels,
-	}
+	for i := 1; i <= 20; i++ {
+		// 隨機作者
+		author := users[rand.Intn(len(users))]
 
-	// 避免重複建立
-	var count int64
-	DB.Model(&models.Article{}).Where("title = ?", article.Title).Count(&count)
-	if count == 0 {
+		// 隨機選 1~3 個 tag
+		nTags := rand.Intn(3) + 1
+		rand.Shuffle(len(tags), func(i, j int) { tags[i], tags[j] = tags[j], tags[i] })
+		articleTags := tags[:nTags]
+
+		// 隨機生成 JSON Content
+		contentMap := map[string]interface{}{
+			"title": fmt.Sprintf("文章 %d 標題", i),
+			"body":  fmt.Sprintf("這是文章 %d 的 **Markdown** 測試內容。", i),
+			"blocks": []map[string]string{
+				{"type": "heading", "text": fmt.Sprintf("文章 %d 標題", i)},
+				{"type": "paragraph", "text": fmt.Sprintf("這是文章 %d 的 **Markdown** 測試內容。", i)},
+			},
+		}
+		contentJSON, err := json.Marshal(contentMap)
+		if err != nil {
+			return err
+		}
+
+		article := models.Article{
+			Title:    fmt.Sprintf("文章 %d", i),
+			AuthorID: author.Id,
+			Content:  datatypes.JSON(contentJSON),
+			Tags:     articleTags,
+		}
+
 		if err := DB.Create(&article).Error; err != nil {
-			return fmt.Errorf("failed to seed article: %v", err)
+			return fmt.Errorf("create article %d failed: %w", i, err)
 		}
 	}
 

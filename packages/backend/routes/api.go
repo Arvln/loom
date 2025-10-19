@@ -14,4 +14,9 @@ func RegisterAPIRoutes(rg *gin.RouterGroup) {
 	rg.POST("/login", controllers.Login)
 	rg.GET("/logout", controllers.Logout)
 	rg.GET("/profile", controllers.Profile)
+	rg.POST("/articles", controllers.CreateArticle)
+	rg.GET("/articles", controllers.GetArticles)
+	rg.GET("/articles/:id", controllers.GetArticles)
+	rg.PUT("/articles/:id", controllers.UpdateArticle)
+	rg.DELETE("/articles/:id", controllers.DeleteArticle)
 }

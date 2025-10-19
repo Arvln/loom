@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Article API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /articles:
+    post:
+      summary: Create a new article
+      tags:
+        - Articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleInput'
+      responses:
+        '200':
+          description: Created article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+    get:
+      summary: Get articles (with optional cursor pagination and search)
+      tags:
+        - Articles
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: ID of the last article from previous page
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search in title or content
+      responses:
+        '200':
+          description: List of articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: integer
+                  nextCursor:
+                    type: string
+                  articles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+  /articles/{id}:
+    get:
+      summary: Get single article by ID
+      tags:
+        - Articles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Article found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+    put:
+      summary: Update an article by ID
+      tags:
+        - Articles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleInput'
+      responses:
+        '200':
+          description: Updated article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+    delete:
+      summary: Delete an article by ID
+      tags:
+        - Articles
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Article deleted
+        '404':
+          description: Article not found
+
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: object
+          description: JSON structure content
+        author_id:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        status:
+          type: string
+          enum:
+            - draft
+            - published
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ArticleInput:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: object
+        author_id:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: integer
+        status:
+          type: string
+          enum:
+            - draft
+            - published
+      required:
+        - title
+        - content
+        - author_id
