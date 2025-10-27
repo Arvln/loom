@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Article API
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: http://localhost:8080
 paths:
@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ResponseArticle'
     get:
       summary: Get articles (with optional cursor pagination and search)
       tags:
@@ -49,16 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  limit:
-                    type: integer
-                  nextCursor:
-                    type: string
-                  articles:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ResponseArticleList'
   /articles/{id}:
     get:
       summary: Get single article by ID
@@ -76,9 +67,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ResponseArticle'
         '404':
           description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
     put:
       summary: Update an article by ID
       tags:
@@ -101,9 +96,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ResponseArticle'
         '404':
           description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
     delete:
       summary: Delete an article by ID
       tags:
@@ -115,13 +114,22 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        '200':
           description: Article deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseMessage'
         '404':
           description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
 
 components:
   schemas:
+    # === 基本資料結構 ===
     Article:
       type: object
       properties:
@@ -134,8 +142,18 @@ components:
           description: JSON structure content
         author_id:
           type: integer
+          nullable: true
+        author:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
         tags:
           type: array
+          nullable: true
           items:
             type: object
             properties:
@@ -154,6 +172,7 @@ components:
         updated_at:
           type: string
           format: date-time
+
     ArticleInput:
       type: object
       properties:
@@ -163,8 +182,10 @@ components:
           type: object
         author_id:
           type: integer
+          nullable: true
         tags:
           type: array
+          nullable: true
           items:
             type: integer
         status:
@@ -175,4 +196,48 @@ components:
       required:
         - title
         - content
-        - author_id
+
+    # === 統一回應格式 ===
+    ResponseMessage:
+      type: object
+      properties:
+        data:
+          nullable: true
+        message:
+          type: string
+
+    ResponseError:
+      type: object
+      properties:
+        data:
+          nullable: true
+        message:
+          type: string
+          example: 錯誤訊息
+
+    ResponseArticle:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Article'
+        message:
+          type: string
+          example: 取得成功
+
+    ResponseArticleList:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            limit:
+              type: integer
+            nextCursor:
+              type: string
+            articles:
+              type: array
+              items:
+                $ref: '#/components/schemas/Article'
+        message:
+          type: string
+          example: 取得文章列表成功

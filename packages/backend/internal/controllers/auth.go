@@ -16,8 +16,6 @@ import (
 // 用一個簡單的 secret，正式環境要放環境變數
 // var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-var DB = db.DB
-
 // --- Register ---
 func Register(c *gin.Context) {
 	var req struct {
@@ -45,7 +43,7 @@ func Register(c *gin.Context) {
 		Name:     req.Name,
 	}
 
-	if err := DB.Create(&user).Error; err != nil {
+	if err := db.DB.Create(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "username already exists"})
 		return
 	}
@@ -65,7 +63,7 @@ func Login(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := DB.Where("username = ?", req.Username).First(&user).Error; err != nil {
+	if err := db.DB.Where("username = ?", req.Username).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
 	}
@@ -109,7 +107,7 @@ func Profile(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := DB.First(&user, userID).Error; err != nil {
+	if err := db.DB.First(&user, userID).Error; err != nil {
 		c.JSON(404, gin.H{"error": "Not found"})
 		return
 	}

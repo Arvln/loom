@@ -10,16 +10,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var DB = db.DB
+// 統一回應格式
+func respond(c *gin.Context, status int, data interface{}, message string) {
+	c.JSON(status, gin.H{
+		"data":    data,
+		"message": message,
+	})
+}
 
 func CreateArticle(c *gin.Context) {
 	var article models.Article
 	if err := c.ShouldBindJSON(&article); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		respond(c, http.StatusBadRequest, nil, err.Error())
 		return
 	}
-	DB.Create(&article)
-	c.JSON(http.StatusOK, article)
+	db.DB.Create(&article)
+	respond(c, http.StatusOK, article, "文章建立成功")
 }
 
 func GetArticles(c *gin.Context) {
@@ -29,10 +35,10 @@ func GetArticles(c *gin.Context) {
 	if id != "" {
 		var article models.Article
 		if err := db.DB.First(&article, id).Error; err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+			respond(c, http.StatusNotFound, nil, "文章不存在")
 			return
 		}
-		c.JSON(http.StatusOK, article)
+		respond(c, http.StatusOK, article, "取得單篇文章成功")
 		return
 	}
 
@@ -41,7 +47,7 @@ func GetArticles(c *gin.Context) {
 	cursor := c.Query("cursor") // 上一次最後一筆的 ID
 
 	var articles []models.Article
-	query := DB.Model(&models.Article{})
+	query := db.DB.Model(&models.Article{})
 
 	// 搜尋參數
 	search := c.Query("search")
@@ -64,35 +70,37 @@ func GetArticles(c *gin.Context) {
 		nextCursor = fmt.Sprintf("%d", last.ID)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	data := gin.H{
 		"limit":      limit,
 		"nextCursor": nextCursor,
 		"articles":   articles,
-	})
+	}
+
+	respond(c, http.StatusOK, data, "取得文章列表成功")
 }
 
 func UpdateArticle(c *gin.Context) {
 	id := c.Param("id")
 	var article models.Article
-	if err := DB.First(&article, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+	if err := db.DB.First(&article, id).Error; err != nil {
+		respond(c, http.StatusNotFound, nil, "文章不存在")
 		return
 	}
 	if err := c.ShouldBindJSON(&article); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		respond(c, http.StatusBadRequest, nil, err.Error())
 		return
 	}
-	DB.Save(&article)
-	c.JSON(http.StatusOK, article)
+	db.DB.Save(&article)
+	respond(c, http.StatusOK, article, "文章更新成功")
 }
 
 func DeleteArticle(c *gin.Context) {
 	id := c.Param("id")
 	var article models.Article
-	if err := DB.First(&article, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+	if err := db.DB.First(&article, id).Error; err != nil {
+		respond(c, http.StatusNotFound, nil, "文章不存在")
 		return
 	}
-	DB.Delete(&article)
-	c.Status(http.StatusNoContent)
+	db.DB.Delete(&article)
+	respond(c, http.StatusOK, nil, "文章刪除成功")
 }
