@@ -94,9 +94,9 @@ func RunSeeder() error {
 
 		article := models.Article{
 			Title:    fmt.Sprintf("文章 %d", i),
-			AuthorID: author.Id,
+			AuthorID: &author.Id,
 			Content:  datatypes.JSON(contentJSON),
-			Tags:     articleTags,
+			Tags:     &articleTags,
 		}
 
 		if err := DB.Create(&article).Error; err != nil {
