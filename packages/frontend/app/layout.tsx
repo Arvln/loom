@@ -1,15 +1,21 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Inter, Space_Grotesk } from 'next/font/google'
+import { cn } from '@workspace/ui/lib/utils'
+import { QueryClientProvider } from '@/packages/providers'
 import '@workspace/ui/styles/globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -23,11 +29,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn(
+          inter.variable,
+          spaceGrotesk.variable,
+          'antialiased',
+          'min-w-[343px] max-w-300 mx-auto'
+        )}
       >
-        {children}
+        <QueryClientProvider>{children}</QueryClientProvider>
       </body>
     </html>
   )

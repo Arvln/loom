@@ -6,6 +6,9 @@ services:
     container_name: web
     volumes:
       - ./packages/frontend:/usr/src/packages/frontend:cached
+      - ./packages/api:/usr/src/packages/api
+      - ./packages/locales:/usr/src/packages/locales
+      - ./packages/providers:/usr/src/packages/providers
       - ./packages/ui:/usr/src/packages/ui
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/frontend/node_modules
@@ -21,6 +24,9 @@ services:
     container_name: admin-web
     volumes:
       - ./packages/admin-frontend:/usr/src/packages/admin-frontend:cached
+      - ./packages/api:/usr/src/packages/api
+      - ./packages/locales:/usr/src/packages/locales
+      - ./packages/providers:/usr/src/packages/providers
       - ./packages/ui:/usr/src/packages/ui
       - ./packages/utils:/usr/src/packages/utils
       - /usr/src/packages/admin-frontend/node_modules

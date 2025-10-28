@@ -8,15 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "15.5.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "next": "15.5.2"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "typescript": "^5"
-  }
+    "@tailwindcss/postcss": "^4"
+  },
+  "browserslist": [
+    ">0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ]
 }
