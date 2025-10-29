@@ -1,6 +1,5 @@
 'use client'
 
-import { ReactNode } from 'react'
 import {
   QueryClient,
   QueryClientProvider as ClientProvider,
@@ -12,7 +11,7 @@ const queryClient = new QueryClient()
 export const QueryClientProvider = ({
   children,
 }: Readonly<{
-  children: ReactNode
+  children: React.ReactNode
 }>) => (
   <ClientProvider client={queryClient}>
     {children}

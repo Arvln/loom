@@ -7,6 +7,7 @@ services:
     volumes:
       - ./packages/frontend:/usr/src/packages/frontend:cached
       - ./packages/api:/usr/src/packages/api
+      - ./packages/hooks:/usr/src/packages/hooks
       - ./packages/locales:/usr/src/packages/locales
       - ./packages/providers:/usr/src/packages/providers
       - ./packages/ui:/usr/src/packages/ui
@@ -25,6 +26,7 @@ services:
     volumes:
       - ./packages/admin-frontend:/usr/src/packages/admin-frontend:cached
       - ./packages/api:/usr/src/packages/api
+      - ./packages/hooks:/usr/src/packages/hooks
       - ./packages/locales:/usr/src/packages/locales
       - ./packages/providers:/usr/src/packages/providers
       - ./packages/ui:/usr/src/packages/ui

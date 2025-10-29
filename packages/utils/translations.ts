@@ -8,6 +8,7 @@ export const useTranslations = () => {
   const t = (key: string) =>
     (key.split('.').reduce((pre, v) => pre?.[v], translations as any) ??
       key) as string
+
   return { t }
 }
 

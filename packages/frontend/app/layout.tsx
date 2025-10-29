@@ -7,14 +7,12 @@ import '@workspace/ui/styles/globals.css'
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
-  weight: ['400', '700'],
   display: 'swap',
 })
 
 const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
   subsets: ['latin'],
-  weight: ['400', '700'],
   display: 'swap',
 })
 
@@ -29,13 +27,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={cn(spaceGrotesk.className, 'dark')}>
       <body
         className={cn(
           inter.variable,
           spaceGrotesk.variable,
           'antialiased',
-          'min-w-[343px] max-w-300 mx-auto'
+          'min-w-[343px] max-w-300 mx-auto h-dvh'
         )}
       >
         <QueryClientProvider>{children}</QueryClientProvider>
