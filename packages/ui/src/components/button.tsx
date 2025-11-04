@@ -10,11 +10,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         icon: 'rounded-xl size-11 md:size-auto p-2.5 md:px-0 flex justify-center items-center text-neutral-lighter hover:text-neutral-lightest cursor-pointer disabled:cursor-default',
+        chip: 'font-bold rounded-lg cursor-pointer',
       },
       size: {
-        sm: 'px-4 py-3 text-xs/normal',
-        md: 'px-4 py-3 text-[13px]/normal xl:text-sm/normal',
-        lg: 'px-4 py-3 md:px-6 text-sm/normal xl:text-base/normal',
+        lg: 'px-4 py-2.5 text-sm/normal',
       },
     },
     defaultVariants: {

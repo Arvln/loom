@@ -1,12 +1,13 @@
 'use client'
 
-import { useTranslations } from '@/packages/utils'
 import { useState } from 'react'
+import { useTranslations } from '@/packages/utils'
 import { useDebounce } from '@/packages/hooks'
 import { Input } from '@workspace/ui/components/input'
 import { Button } from '@workspace/ui/components/button'
 import { SquarePen, Search, SearchIcon } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export const Header = () => {
   const { t } = useTranslations()
@@ -31,12 +32,14 @@ export const Header = () => {
         </div>
       </div>
       <div className="flex gap-4 md:gap-6">
-        <Button variant="icon" size="icon">
-          <SquarePen size="24" />
-          <span className="hidden md:inline-block md:text-base/normal">
-            {t('create.post')}
-          </span>
-        </Button>
+        <Link href="/new-story">
+          <Button variant="icon" size="icon">
+            <SquarePen size="24" />
+            <span className="hidden md:inline-block md:text-base/normal">
+              {t('main.header.newStory')}
+            </span>
+          </Button>
+        </Link>
         <Button className="md:hidden" variant="icon">
           <Search size="24" />
         </Button>
