@@ -6,8 +6,8 @@ import { useDebounce } from '@/packages/hooks'
 import { Input } from '@workspace/ui/components/input'
 import { Button } from '@workspace/ui/components/button'
 import { SquarePen, Search, SearchIcon } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const Header = () => {
   const { t } = useTranslations()
@@ -17,7 +17,9 @@ export const Header = () => {
   return (
     <header className="px-6 py-2 border-b border-b-neutral-default flex justify-between">
       <div className="flex md:gap-6">
-        <h1 className="self-center text-xl font-bold">NoteSphere</h1>
+        <Link href="/" className="self-center text-xl font-bold">
+          NoteSphere
+        </Link>
         <div className="hidden md:block relative flex-1 rounded-2xl text-neutral-default bg-neutral-lighter">
           <Input
             className="peer w-xs h-full ps-12 pe-4 rounded-2xl focus-visible:border-2 focus-visible:border-secondary-default focus-visible:outline-none focus-visible:ring-0 placeholder:text-base/normal placeholder:text-neutral-default"
