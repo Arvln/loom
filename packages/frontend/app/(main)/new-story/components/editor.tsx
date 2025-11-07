@@ -7,6 +7,7 @@ import { DataBoundary } from '@workspace/ui/design'
 import { cn } from '@workspace/ui/lib/utils'
 import { TextStyleKit } from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
 import Image from '@tiptap/extension-image'
 import { type Editor as TiptapEditor, type JSONContent } from '@tiptap/react'
@@ -254,27 +255,25 @@ export const Editor = () => {
   const [content, setContent] = useState<JSONContent>()
   const debounceContent = useDebounce(content, 3000)
   const editor = useEditor({
-    extensions,
+    extensions: [
+      ...extensions,
+      Placeholder.configure({
+        placeholder: ({ editor, node }) => {
+          const firstChild = editor.state.doc.children[0]
+          const secondChild = editor.state.doc.children[1]
+
+          if (node === firstChild)
+            return t('main.newStory.editor.placeholder.title')
+          else if (node === secondChild)
+            return t('main.newStory.editor.placeholder.content')
+          else return ''
+        },
+        showOnlyCurrent: false,
+      }),
+    ],
     content: {
       type: 'doc',
-      content: [
-        {
-          type: 'heading',
-          attrs: { textAlign: null, level: 1 },
-          content: [{ type: 'text', marks: [{ type: 'bold' }], text: 'Title' }],
-        },
-        {
-          type: 'paragraph',
-          attrs: { textAlign: null },
-          content: [
-            {
-              type: 'text',
-              marks: [{ type: 'bold' }],
-              text: 'Share your story...',
-            },
-          ],
-        },
-      ],
+      content: [{ type: 'heading' }, { type: 'paragraph' }],
     },
     onUpdate: ({ editor }) => {
       setContent(editor.getJSON())

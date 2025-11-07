@@ -103,4 +103,13 @@
       outline: 3px solid var(--purple);
     }
   }
+
+  .is-empty:first-child::before,
+  .is-empty:nth-child(2)::before {
+    content: attr(data-placeholder);
+    float: left;
+    font-weight: 700;
+    pointer-events: none;
+    height: 0;
+  }
 }
