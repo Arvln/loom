@@ -49,7 +49,7 @@ func GetArticles(c *gin.Context) {
 	var articles []models.Article
 	query := db.DB.Model(&models.Article{})
 
-	// 搜尋參數
+	// 搜尋條件
 	search := c.Query("search")
 	if search != "" {
 		query = query.Where("title ILIKE ? OR content::text ILIKE ?", "%"+search+"%", "%"+search+"%")
@@ -70,9 +70,26 @@ func GetArticles(c *gin.Context) {
 		nextCursor = fmt.Sprintf("%d", last.ID)
 	}
 
+	// 前一個游標（往前）
+	var prevCursor string
+	if len(articles) > 0 {
+		first := articles[0]
+		var prev models.Article
+		// 找出比目前第一筆大的那一筆
+		if err := db.DB.
+			Model(&models.Article{}).
+			Where("id > ?", first.ID).
+			Order("id ASC").
+			Limit(1).
+			Find(&prev).Error; err == nil && prev.ID != 0 {
+			prevCursor = fmt.Sprintf("%d", prev.ID)
+		}
+	}
+
 	data := gin.H{
 		"limit":      limit,
 		"nextCursor": nextCursor,
+		"prevCursor": prevCursor,
 		"articles":   articles,
 	}
 

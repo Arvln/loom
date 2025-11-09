@@ -151,21 +151,21 @@ components:
               type: integer
             name:
               type: string
-        tags:
-          type: array
-          nullable: true
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-        status:
-          type: string
-          enum:
-            - draft
-            - published
+        # tags:
+        #   type: array
+        #   nullable: true
+        #   items:
+        #     type: object
+        #     properties:
+        #       id:
+        #         type: integer
+        #       name:
+        #         type: string
+        # status:
+        #   type: string
+        #   enum:
+        #     - draft
+        #     - published
         created_at:
           type: string
           format: date-time
@@ -183,16 +183,16 @@ components:
         author_id:
           type: integer
           nullable: true
-        tags:
-          type: array
-          nullable: true
-          items:
-            type: integer
-        status:
-          type: string
-          enum:
-            - draft
-            - published
+        # tags:
+        #   type: array
+        #   nullable: true
+        #   items:
+        #     type: integer
+        # status:
+        #   type: string
+        #   enum:
+        #     - draft
+        #     - published
       required:
         - title
         - content
