@@ -6,11 +6,17 @@ WORKDIR /usr/src
 
 COPY ./ ./
 
+RUN npm install -g pm2 pnpm && pnpm install --frozen-lockfile
+
+ENV PNPM_STORE_PATH=/pnpm-store
+
+RUN mkdir -p /pnpm-store
+
 ENV CI=true
 
 WORKDIR /usr/src/packages/ui
 
-RUN npm install -g pm2 pnpm && pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 WORKDIR /usr/src/packages/admin-frontend
 

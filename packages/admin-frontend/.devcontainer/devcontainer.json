@@ -12,6 +12,9 @@
       ]
     }
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
   "overrideCommand": false,
   "postCreateCommand": "corepack enable && pnpm install"
 }
