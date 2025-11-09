@@ -40,28 +40,28 @@ func RunSeeder() error {
 		}
 	}
 
-	// 建立 tags（避免重複）
-	// tagNames := []string{
-	// 	"Go",
-	// 	"Gin",
-	// 	"GORM",
-	// 	"API",
-	// 	"Backend",
-	// 	"Frontend",
-	// 	"Database",
-	// 	"JSON",
-	// 	"Markdown",
-	// 	"Testing",
-	// }
-	// var tags []models.Tag
+	// 建立 topics（避免重複）
+	topicNames := []string{
+		"Go",
+		"Gin",
+		"GORM",
+		"API",
+		"Backend",
+		"Frontend",
+		"Database",
+		"JSON",
+		"Markdown",
+		"Testing",
+	}
+	var topics []models.Topic
 
-	// for _, name := range tagNames {
-	// 	var tag models.Tag
-	// 	if err := DB.Where("name = ?", name).FirstOrCreate(&tag, models.Tag{Name: name}).Error; err != nil {
-	// 		return fmt.Errorf("failed to seed tag %s: %v", name, err)
-	// 	}
-	// 	tags = append(tags, tag)
-	// }
+	for _, name := range topicNames {
+		var topic models.Topic
+		if err := DB.Where("name = ?", name).FirstOrCreate(&topic, models.Topic{Name: name}).Error; err != nil {
+			return fmt.Errorf("failed to seed topic %s: %v", name, err)
+		}
+		topics = append(topics, topic)
+	}
 
 	// 建立文章，使用 Alice 作為作者
 	var alice models.User
@@ -73,10 +73,10 @@ func RunSeeder() error {
 		// 隨機作者
 		author := users[rand.Intn(len(users))]
 
-		// 隨機選 1~3 個 tag
-		// nTags := rand.Intn(3) + 1
-		// rand.Shuffle(len(tags), func(i, j int) { tags[i], tags[j] = tags[j], tags[i] })
-		// articleTags := tags[:nTags]
+		// 隨機選 1~3 個 topic
+		nTopics := rand.Intn(3) + 1
+		rand.Shuffle(len(topics), func(i, j int) { topics[i], topics[j] = topics[j], topics[i] })
+		articleTopics := topics[:nTopics]
 
 		// 隨機生成 JSON Content
 		contentMap := map[string]interface{}{
@@ -96,7 +96,7 @@ func RunSeeder() error {
 			Title:    fmt.Sprintf("文章 %d", i),
 			AuthorID: &author.Id,
 			Content:  datatypes.JSON(contentJSON),
-			// Tags:     &articleTags,
+			Topics:   &articleTopics,
 		}
 
 		if err := DB.Create(&article).Error; err != nil {

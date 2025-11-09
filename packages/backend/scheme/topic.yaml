@@ -1,0 +1,59 @@
+openapi: 3.0.3
+info:
+  title: Topic API
+  version: 1.1.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /topics:
+    get:
+      summary: 取得所有 Topic 的 ID 與名稱
+      tags:
+        - Topics
+      operationId: getTopics
+      responses:
+        "200":
+          description: 成功取得 Topic 列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: 取得成功
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TopicSimple'
+        "500":
+          description: 伺服器錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 取得 Topic 列表失敗
+                  error:
+                    type: string
+                    example: database error message
+
+components:
+  schemas:
+    TopicSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Technology"

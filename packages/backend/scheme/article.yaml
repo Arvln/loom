@@ -43,6 +43,11 @@ paths:
           schema:
             type: string
           description: Search in title or content
+        - in: query
+          name: author
+          schema:
+            type: string
+          description: Search by author username
       responses:
         '200':
           description: List of articles
@@ -50,6 +55,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseArticleList'
+
   /articles/{id}:
     get:
       summary: Get single article by ID
@@ -151,16 +157,16 @@ components:
               type: integer
             name:
               type: string
-        # tags:
-        #   type: array
-        #   nullable: true
-        #   items:
-        #     type: object
-        #     properties:
-        #       id:
-        #         type: integer
-        #       name:
-        #         type: string
+        topics:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
         # status:
         #   type: string
         #   enum:
@@ -183,11 +189,11 @@ components:
         author_id:
           type: integer
           nullable: true
-        # tags:
-        #   type: array
-        #   nullable: true
-        #   items:
-        #     type: integer
+        topics:
+          type: array
+          nullable: true
+          items:
+            type: integer
         # status:
         #   type: string
         #   enum:

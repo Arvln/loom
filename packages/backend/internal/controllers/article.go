@@ -49,6 +49,12 @@ func GetArticles(c *gin.Context) {
 	var articles []models.Article
 	query := db.DB.Model(&models.Article{})
 
+	// 搜尋作者 username
+	author := c.Query("author")
+	if author != "" {
+		query = query.Where("LOWER(users.username) = LOWER(?)", author)
+	}
+
 	// 搜尋條件
 	search := c.Query("search")
 	if search != "" {
