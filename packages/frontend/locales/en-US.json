@@ -5,7 +5,8 @@
     },
     "newStory": {
       "title": "Draft",
-      "updateStatus": "Saved",
+      "saving": "Saving...",
+      "saved": "Saved",
       "publish": "publish",
       "editor": {
         "bold": "Bold",
@@ -31,6 +32,13 @@
         "placeholder": {
           "title": "Title",
           "content": "Share your story..."
+        },
+        "publishDialog": {
+          "title": "Publish to",
+          "description": "Choose one topic so readers know what your note is about",
+          "selectPlaceholder": "Choose one topic for your note",
+          "saveToDrafts": "Save to drafts",
+          "publishNow": "Publish now"
         }
       }
     }

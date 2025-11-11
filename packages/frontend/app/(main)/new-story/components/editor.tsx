@@ -250,7 +250,13 @@ const MenuBar = ({ editor }: { editor: TiptapEditor }) => {
   )
 }
 
-export const Editor = () => {
+export const Editor = ({
+  onUpdate,
+  onDebounceUpdate,
+}: {
+  onUpdate?: (content: JSONContent) => void
+  onDebounceUpdate?: (content: JSONContent) => void
+}) => {
   const { t } = useTranslations()
   const [content, setContent] = useState<JSONContent>()
   const debounceContent = useDebounce(content, 3000)
@@ -277,12 +283,14 @@ export const Editor = () => {
     },
     onUpdate: ({ editor }) => {
       setContent(editor.getJSON())
+      onUpdate?.(editor.getJSON())
     },
     immediatelyRender: false,
   })
 
   useEffect(() => {
     // TODO: Save content every 3 seconds by using api.
+    if (debounceContent) onDebounceUpdate?.(debounceContent)
   }, [debounceContent])
 
   return (

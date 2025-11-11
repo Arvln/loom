@@ -35,7 +35,7 @@ export const Header = () => {
       </div>
       <div className="flex gap-4 md:gap-6">
         <Link href="/new-story">
-          <Button variant="icon" size="icon">
+          <Button variant="icon" size="lg">
             <SquarePen size="24" />
             <span className="hidden md:inline-block md:text-base/normal">
               {t('main.header.newStory')}
