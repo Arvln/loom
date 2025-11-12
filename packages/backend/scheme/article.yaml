@@ -133,6 +133,100 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseError'
 
+  /articles/upsert:
+    post:
+      summary: 新增或更新文章（Upsert Article）
+      description: |
+        若 `id` 未傳或為 0，會新增一篇狀態為 `draft` 的文章。
+        若 `id` 已存在，則會更新該文章的內容。
+        只有當 `status` 明確指定為 `"publish"` 時，才會更新狀態為發布。
+      tags:
+        - Articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                  description: 若指定 id，則更新該文章；未指定則新增。
+                title:
+                  type: string
+                  example: 我的第一篇文章
+                content:
+                  type: string
+                  example: 這是文章內容。
+                status:
+                  type: string
+                  nullable: true
+                  enum: [draft, publish]
+                  example: publish
+                  description: 僅當指定為 publish 時會將文章設為發布。
+              required:
+                - title
+                - content
+      responses:
+        '200':
+          description: 成功（新增或更新文章）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: 文章新增成功（狀態：draft）
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: 我的第一篇文章
+                      content:
+                        type: string
+                        example: 這是文章內容。
+                      status:
+                        type: string
+                        nullable: true
+                        example: draft
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: 2025-11-12T08:00:00Z
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: 2025-11-12T09:00:00Z
+        '400':
+          description: 請求參數錯誤
+          content:
+            application/json:
+              examples:
+                驗證錯誤:
+                  value:
+                    code: 400
+                    msg: 傳入的 JSON 格式錯誤
+                    data: null
+        '500':
+          description: 伺服器內部錯誤
+          content:
+            application/json:
+              examples:
+                新增或更新失敗:
+                  value:
+                    code: 500
+                    msg: 新增失敗：資料庫錯誤
+                    data: null
+
 components:
   schemas:
     # === 基本資料結構 ===
@@ -239,6 +333,8 @@ components:
             limit:
               type: integer
             nextCursor:
+              type: string
+            prevCursor:
               type: string
             articles:
               type: array

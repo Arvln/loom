@@ -18,6 +18,7 @@ func RegisterAPIRoutes(rg *gin.RouterGroup) {
 	rg.GET("/articles", controllers.GetArticles)
 	rg.GET("/articles/:id", controllers.GetArticles)
 	rg.PUT("/articles/:id", controllers.UpdateArticle)
+	rg.POST("/articles/upsert", controllers.UpsertArticle)
 	rg.DELETE("/articles/:id", controllers.DeleteArticle)
 	rg.GET("/topics", controllers.GetTopics)
 }

@@ -127,3 +127,58 @@ func DeleteArticle(c *gin.Context) {
 	db.DB.Delete(&article)
 	respond(c, http.StatusOK, nil, "文章刪除成功")
 }
+
+func UpsertArticle(c *gin.Context) {
+	var input models.Article
+
+	// 綁定 JSON
+	if err := c.ShouldBindJSON(&input); err != nil {
+		respond(c, http.StatusBadRequest, nil, err.Error())
+		return
+	}
+
+	// 如果沒傳 id，就直接新增一筆 draft
+	if input.ID == 0 {
+		status := "draft"
+		input.Status = &status // ✅ 轉成指標
+		if err := db.DB.Create(&input).Error; err != nil {
+			respond(c, http.StatusInternalServerError, nil, "新增失敗："+err.Error())
+			return
+		}
+		respond(c, http.StatusOK, input, "文章新增成功（狀態：draft）")
+		return
+	}
+
+	var article models.Article
+
+	// 若有傳 id → 檢查是否存在
+	err := db.DB.First(&article, input.ID).Error
+	if err != nil {
+		// 查不到 → 新增一筆 draft
+		status := "draft"
+		input.Status = &status // ✅ 轉成指標
+		if err := db.DB.Create(&input).Error; err != nil {
+			respond(c, http.StatusInternalServerError, nil, "新增失敗："+err.Error())
+			return
+		}
+		respond(c, http.StatusOK, input, "文章新增成功（狀態：draft）")
+		return
+	}
+
+	// 存在 → 更新資料
+	article.Title = input.Title
+	article.Content = input.Content
+
+	// 只有明確傳 status=publish 才更改狀態
+	if input.Status != nil && *input.Status == "publish" { // ✅ 先檢查非 nil 再解參照
+		status := "publish"
+		article.Status = &status
+	}
+
+	if err := db.DB.Save(&article).Error; err != nil {
+		respond(c, http.StatusInternalServerError, nil, "更新失敗："+err.Error())
+		return
+	}
+
+	respond(c, http.StatusOK, article, "文章更新成功")
+}
