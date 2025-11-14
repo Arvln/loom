@@ -227,6 +227,11 @@ const MenuBar = ({ editor }: { editor: TiptapEditor }) => {
 
                 // TODO: Save image by using api and get url to insert in editor.
                 console.log(e.target.files[0])
+
+                // example
+                const url =
+                  'https://miro.medium.com/v2/resize:fit:1400/1*fEq6gwSt36V-ep0zkh09qw.jpeg'
+                editor.chain().focus().setImage({ src: url }).run()
               }
             }}
           />
@@ -289,7 +294,6 @@ export const Editor = ({
   })
 
   useEffect(() => {
-    // TODO: Save content every 3 seconds by using api.
     if (debounceContent) onDebounceUpdate?.(debounceContent)
   }, [debounceContent])
 

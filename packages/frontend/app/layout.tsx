@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { cn } from '@workspace/ui/lib/utils'
-import { QueryClientProvider } from '@/packages/providers'
+import { QueryClientProvider, MSWProvider } from '@/packages/providers'
 import '@workspace/ui/styles/globals.css'
 
 const inter = Inter({
@@ -36,7 +36,9 @@ export default function RootLayout({
           'min-w-[343px] max-w-300 mx-auto h-dvh'
         )}
       >
-        <QueryClientProvider>{children}</QueryClientProvider>
+        <QueryClientProvider>
+          <MSWProvider>{children}</MSWProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
